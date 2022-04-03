@@ -30,10 +30,10 @@ import styles from '../styles/Home.module.css'
 import Head from 'next/head'
 
 // TODO: use your private key and address
-const TEST_PRIVATE_KEY = 'YOUR_PRIVATE_KEY'
-const TEST_ADDRESS = 'YOUR_ADDRESS'
-const RECEIVER_PRIVATE_KEY = 'YOUR_ANOTHER_PRIVATE_KEY'
-const RECEIVER_ADDRESS = 'YOUR_ANOTHER_ADDRESS'
+const TEST_PRIVATE_KEY = '0xd4537602bd78139bfde0771f43f7c007ea1bbb858507055d2ef6225d4ebec23e'
+const TEST_ADDRESS = 'ckt1qyqdtuf6kx8f7664atn9xkmwc9qcv4phs4xsackhmh'
+const RECEIVER_PRIVATE_KEY = '0x305fbaead56bde6f675fe0294e2126377d7025f36bf4bc1c8f840cb0e22eafef'
+const RECEIVER_ADDRESS = 'ckt1qyqrvzu5yw30td23fzw5259j0l0pymj2lc9shtynac'
 const OTHER_ADDRESS = 'ckt1qyqz8vxeyrv4nur4j27ktp34fmwnua9wuyqqggd748'
 
 const getSecp256k1CellDep = (isMainnet: boolean): CKBComponents.CellDep => {
@@ -57,10 +57,15 @@ const secp256k1Dep = getSecp256k1CellDep(false)
 
 const service: Service = {
   collector: new Collector({
-    ckbNodeUrl: 'https://testnet.ckbapp.dev/rpc', ckbIndexerUrl: 'https://testnet.ckbapp.dev/indexer'
+    ckbNodeUrl: 'https://testnet.ckbapp.dev/rpc',
+    ckbIndexerUrl: 'https://testnet.ckbapp.dev/indexer'
   }),
-  aggregator: new Aggregator({ registryUrl: 'http://cota-registry-aggregator.rostra.xyz', cotaUrl: 'http://cota-aggregator.rostra.xyz' }),
+  aggregator: new Aggregator({
+    registryUrl: 'https://cota.nervina.dev/registry-aggregator',
+    cotaUrl: 'https://cota.nervina.dev/aggregator'
+  }),
 }
+
 const ckb = service.collector.getCkb()
 
 let cotaId: string = '0xd3b2bc022b52ce7282b354d97f9e5e5baf6698d7'
@@ -108,7 +113,8 @@ const defineNFT = async () => {
     image: "https://i.loli.net/2021/04/29/qyJNSE4iHAas7GL.png",
   }
 
-  let { rawTx, cotaId: cId } = await generateDefineCotaTx(service, defineLock, 100, '0x00', cotaInfo)
+  const totalSupply = 100
+  let { rawTx, cotaId: cId } = await generateDefineCotaTx(service, defineLock, totalSupply, '0x00', cotaInfo)
   cotaId = cId
   console.log(` ======> cotaId: ${cotaId}`)
   console.log(' ===================== secp256k1Dep ===================== ')
